@@ -144,24 +144,25 @@ function renderTask(task) {
     li.appendChild(button);
     list.appendChild(li);
     
-    button.addEventListener("click", function () {
-        fetch(`${API_BASE}/delete.php?stdid=${STUDENT_ID}&key=${API_KEY}&id=${task.id}` , {
-              method: "DELETE" , 
-              headers: {  "Content-Type": "application/json"} 
-        })
-        .then (res => res.json())
-        .then (data =>{ 
-          console.log(data);
-          if (data.success) {
-            li.remove();
-            setStatus ("Task removed");
-          }
-        })
+    button.addEventListener("click", () => deleteTask(task.id , li));
+
+}
+
+function deleteTask(id, li) {
+
+  fetch(`${API_BASE}/delete.php?stdid=${STUDENT_ID}&key=${API_KEY}&id=${id}`)
+      .then (res => res.json())
+      .then (data =>{ 
+        console.log(data);
+        if (data.success) {
+          li.remove();
+          setStatus ("Task removed");
+        }
+      })
 
     .catch(err => {
       console.error(err);
-      setStatus(err.message + " | please take in consedertaion the CORS policy" , true);
+      setStatus(err.message , true);
     });
-  });
 
 }
